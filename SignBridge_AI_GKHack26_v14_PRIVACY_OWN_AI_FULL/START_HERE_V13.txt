@@ -1,0 +1,15 @@
+SIGNBRIDGE AI v13 — HACKATHON BUILD
+
+Key fixes:
+1. Sign detector loop hardened: MediaPipe Hands uses a lighter/faster model and lower detection/tracking thresholds.
+2. Detector now reports hand detection and errors instead of remaining silently on Waiting.
+3. Dark mode toggle added to the top bar.
+4. SASL learning page uses the official NID YouTube Lesson 1 and includes a direct YouTube fallback button.
+
+LOCAL XAMPP:
+C:\xampp\htdocs\SignBridge_AI_GKHack26_v13_DETECTOR_DARKMODE\public\
+
+Open:
+http://localhost/SignBridge_AI_GKHack26_v13_DETECTOR_DARKMODE/public/
+
+Important: the focused AI vocabulary is a prototype. Do not claim universal SASL translation or measured accuracy unless you have validated it with real SASL data/users.

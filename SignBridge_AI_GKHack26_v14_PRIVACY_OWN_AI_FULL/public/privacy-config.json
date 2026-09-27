@@ -1,0 +1,7 @@
+{
+  "camera_raw_video_retention": false,
+  "conversation_training_default": false,
+  "production_data_separate_from_training": true,
+  "privacy_notice": "privacy.html",
+  "prototype_notice": true
+}

@@ -1,0 +1,6 @@
+{
+  "appId": "za.pamsitha.signbridge",
+  "appName": "SignBridge AI",
+  "webDir": "public",
+  "server": { "androidScheme": "https" }
+}

@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#faf9ff">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>SignBridge AI — v14</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+</head>
+<body data-build="v14">
+  <section id="authApp" class="auth-shell">
+    <div id="welcomeView" class="auth-view active welcome-view">
+      <div class="welcome-art"><img src="assets/signbridge-hand.png" alt="SignBridge hand" class="hero-logo"></div>
+      <div class="welcome-brand">
+        <h1 data-i18n="brandName">SignBridge</h1>
+        <p data-i18n="slogan">Asikhulume</p>
+      </div>
+      <button id="welcomeCreate" class="primary wide" data-i18n="createAccount">Create account</button>
+      <button id="welcomeLogin" class="secondary wide" data-i18n="signIn">Sign In</button>
+    </div>
+
+    <form id="registerView" class="auth-view auth-form" autocomplete="on">
+      <button type="button" class="back-btn" data-back="welcome" data-i18n="back">← Back</button>
+      <p class="eyebrow" data-i18n="getStarted">GET STARTED</p><h1><span data-i18n="createYourAccount">Create your account.</span></h1>
+      <p class="auth-copy" data-i18n="accountCopy">Choose your language and keep your journey personalised.</p>
+      <label><span data-i18n="fullName">Full name</span><input id="registerName" required maxlength="60" data-i18n-placeholder="yourName" placeholder="Your name"></label>
+      <label><span data-i18n="email">Email</span><input id="registerEmail" required type="email" autocomplete="email" data-i18n-placeholder="emailPlaceholder" placeholder="you@example.com"></label>
+      <label><span data-i18n="password">Password</span><input id="registerPassword" required type="password" minlength="6" autocomplete="new-password" data-i18n-placeholder="passwordPlaceholder" placeholder="6+ characters"></label>
+      <label><span data-i18n="language">Language</span><select id="registerLanguage"></select></label>
+      <div class="privacy-consent-box">
+        <strong>🔐 Your privacy matters</strong>
+        <p>SignBridge is designed to minimise personal information. Camera input is permission-based, raw camera footage is not retained by default, and conversations are not used to train the SignBridge AI by default.</p>
+        <label class="consent-row"><input id="privacyConsent" type="checkbox" required> <span>I have read the <a href="privacy.html" target="_blank" rel="noopener">Privacy Notice</a> and consent to processing needed to provide SignBridge.</span></label>
+        <label class="consent-row"><input id="trainingConsent" type="checkbox"> <span>I understand that my conversations and camera footage are not automatically used to train the AI.</span></label>
+        <label class="consent-row"><input id="marketingConsent" type="checkbox"> <span>I agree to optional SignBridge updates. (Optional)</span></label>
+      </div>
+      <button class="primary wide" type="submit" data-i18n="createAccount">Create account</button>
+      <p class="switch-auth"><span data-i18n="alreadyHave">Already have an account?</span> <button type="button" class="link-btn" id="toLogin" data-i18n="signIn">Sign in</button></p>
+    </form>
+
+    <form id="loginView" class="auth-view auth-form" autocomplete="on">
+      <button type="button" class="back-btn" data-back="welcome" data-i18n="back">← Back</button>
+      <p class="eyebrow" data-i18n="welcomeBack">WELCOME BACK</p><h1><span data-i18n="signInTitle">Sign in.</span></h1>
+      <p class="auth-copy" data-i18n="continueJourney">Continue your SignBridge journey.</p>
+      <label><span data-i18n="email">Email</span><input id="loginEmail" required type="email" autocomplete="email" data-i18n-placeholder="emailPlaceholder" placeholder="you@example.com"></label>
+      <label><span data-i18n="password">Password</span><input id="loginPassword" required type="password" autocomplete="current-password" data-i18n-placeholder="passwordLoginPlaceholder" placeholder="Your password"></label>
+      <button class="primary wide" type="submit" data-i18n="signIn">Sign in</button>
+      <p class="switch-auth"><span data-i18n="newHere">New here?</span> <button type="button" class="link-btn" id="toRegister" data-i18n="createAccount">Create account</button></p>
+    </form>
+  </section>
+
+  <section id="mainApp" class="app-shell hidden">
+    <header class="topbar">
+      <button id="menuBtn" class="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+      <div class="brand"><img src="assets/signbridge-hand.png" alt="" class="brand-logo"><div><strong>SignBridge</strong><small data-i18n="slogan">Asikhulume</small></div></div>
+      <div class="top-actions">
+        <select id="languageSelect" aria-label="Language"></select>
+        <button id="themeBtn" class="secondary small theme-btn" type="button" aria-label="Toggle dark mode">☾ Dark</button><button id="installBtn" class="secondary small hidden" data-i18n="install">Install</button>
+        <div class="status"><span id="statusDot"></span><span id="statusText" data-i18n="ready">Ready</span></div>
+      </div>
+    </header>
+
+    <main class="shell">
+      <section class="hero compact">
+        <div><p class="eyebrow" data-i18n="communicationSpace">YOUR COMMUNICATION SPACE</p><h1 id="greeting">Hi</h1><p class="hero-copy" data-i18n="chooseCommunication">Choose how you want to communicate.</p></div>
+        <div class="quick-actions">
+          <button class="quick active" data-tab="conversation" data-i18n="quickSign">📷 Sign</button>
+          <button class="quick" data-tab="textSign" data-i18n="quickTextSign">✋ Text → Sign</button>
+        </div>
+      </section>
+
+      <div id="drawerBackdrop" class="drawer-backdrop"></div>
+      <nav id="sidebar" class="tabs" aria-label="Application modes">
+        <button class="tab active" data-tab="conversation" data-i18n="navSignText">📷 <span>Sign → Text</span></button>
+        <button class="tab" data-tab="textSign" data-i18n="navTextSign">✋ <span>Text → Sign</span></button>
+        <button class="tab" data-tab="learnSasl" data-i18n="navLearnSasl">📚 <span>Learn SASL</span></button>
+        <button id="logoutBtn" class="tab logout" data-i18n="signOut">↪ Sign out</button>
+      </nav>
+
+      <section id="conversation" class="tab-panel active">
+        <div class="mode-banner"><div><strong data-i18n="signToText">Sign → Text</strong><span data-i18n="cameraInstruction">Show one supported sign to the camera.</span></div><button id="cameraBtn" class="primary small" data-i18n="startCamera">Start camera</button></div>
+        <div class="grid">
+          <article class="card camera-card">
+            <div class="camera-wrap"><video id="video" autoplay muted playsinline></video><canvas id="overlay"></canvas><div id="cameraPlaceholder"><img src="assets/signbridge-hand.png" alt=""><p data-i18n="cameraOff">Camera is off</p><small data-i18n="tapStartCamera">Tap Start camera</small></div></div>
+            <div class="detection"><div><small data-i18n="detected">DETECTED</small><strong id="gesture">Waiting...</strong></div><div><small data-i18n="confidence">CONFIDENCE</small><strong id="confidence">—</strong></div></div>
+            <div class="sign-learning">
+              <div class="learning-head"><div><span class="label" data-i18n="learnSignsNow">LEARN & TRAIN SASL</span><small data-i18n="learnSignsHint">Start with a focused vocabulary.</small></div><span id="trainingStatus" class="training-status">0 samples</span></div>
+              <div id="cameraSignChips" class="sign-chips"></div>
+              <div class="training-controls">
+                <select id="trainingLabel" aria-label="Training sign"></select>
+                <button id="collectBtn" type="button" class="secondary small" data-i18n="collectSamples">Collect samples</button>
+              </div>
+              <div class="training-progress"><div id="trainingProgressBar"></div></div>
+              <small id="trainingHint" class="training-hint" data-i18n="trainingHint">Show the selected sign clearly. Aim for 30+ varied samples per sign.</small>
+            </div>
+            <div class="learn-resources">
+              <div class="learning-head"><div><span class="label" data-i18n="learnSasl">LEARN SOUTH AFRICAN SIGN LANGUAGE</span><small data-i18n="learnSaslHint">Use trusted learning resources while we validate our model.</small></div></div>
+              <div class="resource-links">
+                <a href="https://www.youtube.com/watch?v=yOZWMlyVsIE" target="_blank" rel="noopener">🙏 <span data-i18n="learnThankYou">Thank you</span></a>
+                <a href="https://www.youtube.com/watch?v=uH_Aw1ds1RU" target="_blank" rel="noopener">🤲 <span data-i18n="learnPlease">Please</span></a>
+                <a href="https://nid.org.za/resources/" target="_blank" rel="noopener">📚 <span data-i18n="learnNid">NID SASL resources</span></a>
+              </div>
+            </div>
+          </article>
+          <article class="card output-card"><span class="label" data-i18n="message">MESSAGE</span><h2 id="messageOutput" data-i18n="messagePlaceholder">Your message appears here.</h2><div class="actions"><button id="speakBtn" class="secondary" data-i18n="speak">🔊 Speak</button><button id="aiBtn" class="secondary" data-i18n="aiAssist">✨ AI assist</button><button id="clearBtn" class="secondary" data-i18n="clear">Clear</button></div><div id="aiNote" class="ai-note hidden"></div></article>
+        </div>
+        <section class="inline-emergency card">
+          <div class="learning-head"><div><span class="label" data-i18n="quickHelp">🆘 Help</span><small data-i18n="tapSpeak">Tap a message to speak it</small></div></div>
+          <div id="emergencyGrid" class="emergency-grid"></div>
+        </section>
+      </section>
+
+      <section id="learnSasl" class="tab-panel">
+        <div class="mode-banner">
+          <div><strong data-i18n="learnPageTitle">Learn South African Sign Language</strong><span data-i18n="learnPageIntro">Learn beginner SASL while you use SignBridge.</span></div>
+        </div>
+        <div class="learning-hero card">
+          <div>
+            <span class="label" data-i18n="trustedLearning">TRUSTED LEARNING</span>
+            <h2 data-i18n="learnMainHeading">Start with SASL basics</h2>
+            <p data-i18n="learnMainCopy">These videos are learning resources for non-signers and anyone who wants to build basic SASL communication skills.</p>
+          </div>
+          <a class="secondary resource-button" href="https://nid.org.za/resources/" target="_blank" rel="noopener" data-i18n="openNidResources">Open NID resources ↗</a>
+        </div>
+        <div class="learning-grid">
+          <article class="card video-card featured-video">
+            <div class="video-frame"><iframe src="https://www.youtube.com/embed/iesx_3euFO0?rel=0&modestbranding=1" title="South African Sign Language Online Training Lesson 1 — National Institute for the Deaf" loading="eager" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><a class="video-fallback" href="https://www.youtube.com/watch?v=iesx_3euFO0" target="_blank" rel="noopener">▶ Watch this SASL lesson on YouTube</a>
+            <div class="video-meta"><span class="label" data-i18n="officialNid">NID • BEGINNER LESSON 1</span><h3 data-i18n="nidLesson1">South African Sign Language Online Training — Lesson 1</h3><p data-i18n="nidLesson1Copy">An introductory SASL lesson from the National Institute for the Deaf.</p></div>
+          </article>
+          <div class="learning-side">
+            <article class="card resource-card"><span class="resource-emoji">👋</span><div><span class="label" data-i18n="communityReference">COMMUNITY REFERENCE</span><h3 data-i18n="helloReference">Greetings / Hello</h3><a href="https://www.youtube.com/watch?v=A5z15086jSs" target="_blank" rel="noopener" data-i18n="watchOnYoutube">Watch on YouTube ↗</a></div></article>
+            <article class="card resource-card"><span class="resource-emoji">🙏</span><div><span class="label" data-i18n="communityReference">COMMUNITY REFERENCE</span><h3 data-i18n="thankReference">Thank you</h3><a href="https://www.youtube.com/watch?v=yOZWMlyVsIE" target="_blank" rel="noopener" data-i18n="watchOnYoutube">Watch on YouTube ↗</a></div></article>
+            <article class="card resource-card"><span class="resource-emoji">🤲</span><div><span class="label" data-i18n="communityReference">COMMUNITY REFERENCE</span><h3 data-i18n="pleaseReference">Please</h3><a href="https://www.youtube.com/watch?v=uH_Aw1ds1RU" target="_blank" rel="noopener" data-i18n="watchOnYoutube">Watch on YouTube ↗</a></div></article>
+          </div>
+        </div>
+        <div class="learning-note card">
+          <strong data-i18n="learnNoteTitle">Learn first. Validate before we train.</strong>
+          <span data-i18n="learnNoteCopy">SASL has natural variation. SignBridge uses trusted resources as references while its focused AI vocabulary is trained and validated with the community. These learning videos are not presented as SignBridge's own translations.</span>
+        </div>
+      </section>
+
+      <section id="textSign" class="tab-panel">
+        <div class="mode-banner"><div><strong data-i18n="textToSign">Text → Sign</strong><span data-i18n="textSignInstruction">Type a message. Pick a phrase. See the visual cue.</span></div></div>
+        <div class="grid two">
+          <article class="card">
+            <span class="label" data-i18n="yourWords">YOUR WORDS</span><h2 data-i18n="whatSay">What do you want to say?</h2>
+            <textarea id="textToSignInput" rows="4" data-i18n-placeholder="messagePlaceholderInput" placeholder="Type a message..."></textarea>
+            <div class="phrase-chips" id="signPhraseChips"></div>
+            <button id="showSignBtn" class="primary wide" data-i18n="showVisual">Show visual cue</button>
+          </article>
+          <article class="card sign-stage" id="signStage">
+            <span class="label" data-i18n="visualCue">VISUAL CUE</span>
+            <div id="signEmoji" class="sign-emoji" aria-live="polite">👋</div>
+            <h2 id="signWord">Hello</h2><p id="signInstruction">Choose a phrase to see its emoji visual cue.</p>
+            <button id="signSpeakBtn" class="secondary wide" data-i18n="speakText">🔊 Speak text</button>
+          </article>
+        </div>
+        <div class="small-note" data-i18n="textSignNote">Emoji visuals are communication aids, not authoritative SASL translations. SASL signs and motion content should be community-validated before production use.</div>
+      </section>
+
+    </main>
+  </section>
+  <div id="toast" class="toast"></div>
+  <script src="app.js"></script><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});</script>
+</body>
+</html>

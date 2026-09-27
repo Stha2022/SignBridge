@@ -1,0 +1,39 @@
+SIGNBRIDGE AI — GKHACK26 FULL PROJECT
+
+This is the complete project folder.
+
+MAIN FILES:
+- server.js                 Express server
+- package.json              Node dependencies/scripts
+- public/index.html         Full web app UI
+- public/style.css          Full app styling
+- public/app.js             Application logic/camera/UI
+- public/sw.js              Offline service worker
+- public/manifest.webmanifest  Installable PWA manifest
+- public/icons/             App icons
+- api/auth.php              PHP registration/login API
+- api/schema.sql            MySQL database schema
+- api/config.php.example    PHP/MySQL configuration template
+- capacitor.config.json     Native Android wrapper configuration
+- .env.example              Environment variable template
+- README_HACKATHON_BUILD.md Setup and demo instructions
+
+RECOMMENDED HACKATHON DEMO — PHP + MYSQL:
+1. Copy the full folder to C:\xampp\htdocs\signbridge-v2\
+2. Start Apache and MySQL in XAMPP.
+3. Import api/schema.sql in phpMyAdmin.
+4. Copy api/config.php.example to api/config.php.
+5. Open http://localhost/signbridge-v2/public/
+6. Create an account. The record will appear in signbridge.users.
+
+IMPORTANT AUTHENTICATION NOTE:
+There is no local password fallback. A user must authenticate through PHP + MySQL.
+The PHP API creates a server-side session after login.
+
+OPTIONAL NODE DEVELOPMENT:
+1. Open this folder in VS Code.
+2. Run: npm.cmd install
+3. Run: npm.cmd start
+4. Open: http://localhost:3000
+
+Do not use VS Code Live Server for the PHP/MySQL demonstration.

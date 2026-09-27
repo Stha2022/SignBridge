@@ -1,0 +1,39 @@
+SIGNBRIDGE AI — ONE-FOLDER XAMPP DEPLOYMENT
+
+EXTRACT THIS ZIP DIRECTLY INTO:
+C:\xampp\htdocs\
+
+After extraction, there must be ONLY ONE project folder:
+
+C:\xampp\htdocs\SignBridge_AI_GKHack26_v14_PRIVACY_OWN_AI_FULL\
+
+Inside THAT folder you should immediately see:
+api
+public
+.env.example
+capacitor.config.json
+COMPETITOR_RESEARCH
+DEPLOYMENT_HOSTING
+package.json
+PRIVACY_SECURITY_README
+README_HACKATHON_BUILD
+server.js
+SSDLC
+START_HERE
+START_HERE_V13
+TEACHABLE_MACHINE_GUIDE
+XAMPP_SETUP
+
+There must NOT be another SignBridge folder inside it.
+
+OPEN THE APP:
+http://localhost/SignBridge_AI_GKHack26_v14_PRIVACY_OWN_AI_FULL/public/
+
+DO NOT open index.html with file:///.
+Use Apache through http://localhost/.
+
+For PHP/MySQL:
+1. Start Apache and MySQL in XAMPP.
+2. Import api/schema.sql in phpMyAdmin.
+3. Configure api/config.php for your local MySQL credentials.
+4. If using an older database, run api/migration_privacy.sql once.
